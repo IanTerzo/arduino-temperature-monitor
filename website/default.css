@@ -1,0 +1,43 @@
+#topHeader {
+	text-align: center;
+	width: 100%;
+}
+
+.topHeaderBig {
+	font-family: 'Montserrat';font-size: 22px;
+}
+
+.topHeaderInfoGroup {
+	poistion: relative;
+}
+
+.topHeaderContainer {
+	top: 50px;
+	position: absolute;
+	width:40%;
+    left: 50%;
+    transform: translate(-50%, 0);
+	max-width: 1000px;
+}
+
+#topHeaderInfoGroup1 {
+	float: left;
+}
+
+#topHeaderInfoGroup2 {
+	display: inline-block;
+    vertical-align: top;
+}
+
+#topHeaderInfoGroup3 {
+	float: right;
+}
+
+#myChart {
+	position: absolute;
+	left:50%;
+	top: 150px;
+	transform: translate(-50%, 0);
+	width:100%;
+	max-width:800px
+}

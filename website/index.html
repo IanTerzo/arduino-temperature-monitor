@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Temperatur i ABB-Gymnasiet</title>
+    <link rel="stylesheet" href="default.css">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <div id="topHeader">
+      <div class="topHeaderContainer">
+        <div class="topHeaderInfoGroup" id="topHeaderInfoGroup1">
+          <div>
+            <a class="topHeaderBig" id="temp">+Nan°C</a>
+          </div>
+          <div>
+            <a>Temperatur</a>
+          </div>
+        </div>
+        <div class="topHeaderInfoGroup" id="topHeaderInfoGroup2">
+          <div>
+            <a class="topHeaderBig">ABB-Gymnasiet</a>
+          </div>
+          <div>
+            <a>Västerås</a>
+          </div>
+        </div>
+        <div class="topHeaderInfoGroup" id="topHeaderInfoGroup3">
+          <div>
+            <a class="topHeaderBig" id="humidity">Nan%</a>
+          </div>
+          <div>
+            <a>Fuktighet</a>
+          </div>
+        </div>
+      </div>
+      <canvas id="myChart"></canvas>
+      <script>
+	      
+	const ARDUINO_IP = "http://123.123.23.23"
+        const xValues = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+        const yValues = [];
+        var graph = new Chart("myChart", {
+          type: "line",
+          data: {
+            labels: xValues,
+            datasets: [{
+              fill: false,
+              lineTension: 0,
+              backgroundColor: "rgba(0,0,255,1.0)",
+              borderColor: "rgba(0,0,255,0.1)",
+              data: yValues
+            }]
+          },
+          options: {
+            legend: {
+              display: false
+            },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  min: 18,
+                  max: 28
+                }
+              }],
+            }
+          }
+        });
+        const interval = setInterval(function() {
+          fetch(ARDUINO_IP + "/load").then(response => response.json()).then(data => {
+            document.getElementById("temp").textContent = "+" + Math.round(data.temp) + "°C"
+            document.getElementById("humidity").textContent = Math.round(data.humidity) + "%"
+            if (graph.data.datasets[0]['data'].length == 11) {
+              graph.data.datasets[0]['data'] = []
+            }
+            graph.data.datasets[0]['data'].push(Math.round(data.temp))
+            graph.update();
+          }).catch(error => {
+            console.error('Fetch error:', error);
+          });
+        }, 1000);
+      </script>
+      <script>
+        function addData(chart, label, newData) {
+          chart.data.labels.push(label);
+          chart.data.datasets.forEach((dataset) => {
+            dataset.data.push(newData);
+          });
+          chart.update();
+          addData
+        }
+      </script>
+  </body>
+</html>
